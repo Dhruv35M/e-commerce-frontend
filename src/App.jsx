@@ -3,7 +3,7 @@ import "./App.css";
 function App() {
   return (
     <>
-      <h1>ecommerce</h1>
+      <h1 className="text-slate-600 hover:text-sky-500 text-3xl">ecommerce</h1>
     </>
   );
 }
