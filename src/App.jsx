@@ -7,7 +7,7 @@ function App() {
   return (
     <>
       <Header />
-      <main>
+      <main style={{ minHeight: `calc(100vh - 120px)` }}>
         <Outlet />
       </main>
       <Footer />

@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
-    <header className="h-16 shadow-md bg-white fixed w-full z-40">
+    <header className="h-16 shadow-md bg-white w-full z-40">
       <div className=" h-full container mx-auto flex items-center px-4 justify-between">
         <div className="">
           <Link to={"/"}>
@@ -21,7 +21,7 @@ const Header = () => {
             placeholder="search product here..."
             className="w-full outline-none"
           />
-          <div className="text-lg min-w-[50px] h-8 bg-blue-600 flex items-center justify-center rounded-r-full text-white">
+          <div className="text-lg min-w-[50px] h-8 bg-blue-600 flex items-center justify-center rounded-r-full text-white hover:cursor-pointer">
             <GrSearch />
           </div>
         </div>
