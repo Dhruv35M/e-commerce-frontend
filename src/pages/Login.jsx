@@ -28,10 +28,10 @@ const Login = () => {
     e.preventDefault();
 
     if (!data.email || !data.password) {
-      alert("All feilds are required!");
+      console.log("All feilds are required!");
     }
 
-    alert("login successful");
+    console.log("login successful");
     navigate("/");
   };
 

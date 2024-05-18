@@ -3,6 +3,7 @@ import Avatar from "../assests/avatar.png";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import SummaryApi from "../common";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -30,7 +31,7 @@ const Register = () => {
     });
   };
 
-  const handleUploadPic = async (e) => {
+  const handleProfileImgUpload = async (e) => {
     setuserProfileImg(e.target.files[0]);
     console.log(e.target.files[0]);
   };
@@ -38,17 +39,40 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!data.email || !data.password) {
-      alert("All feilds are required!");
+    if (
+      !data.firstName ||
+      !data.lastName ||
+      !data.email ||
+      !data.password ||
+      !data.confirmPassword
+    ) {
+      console.log("All feilds are required!");
     }
 
     if (data.password !== data.confirmPassword) {
-      alert("Please check password and confirm password");
+      console.log("Please check password and confirm password");
       return;
     }
 
-    alert("Register successful");
-    navigate("/");
+    try {
+      const responseData = await fetch(SummaryApi.Register.url, {
+        method: SummaryApi.Register.method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const response = await responseData.json();
+      if (response) {
+        console.log("registered");
+        navigate("/");
+      } else {
+        console.log("failed to register");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -78,7 +102,7 @@ const Register = () => {
                   <input
                     type="file"
                     className="hidden"
-                    onChange={handleUploadPic}
+                    onChange={handleProfileImgUpload}
                   />
                 </label>
               </form>
