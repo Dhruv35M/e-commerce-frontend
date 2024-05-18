@@ -89,22 +89,22 @@ const Register = () => {
         body: JSON.stringify(data),
       });
 
-      const response = await responseData.json();
-
-      if (response.status === 201) {
+      if (responseData.ok) {
+        const response = await responseData.json();
         localStorage.setItem("token", response.token);
         localStorage.setItem("userId", response.userId);
-        toast.success(response);
+        toast.success("Registered Successfully.");
         console.log({ data, response });
         navigate("/");
         fetchUserDetails();
+        return;
+      } else {
+        const response = await responseData.json();
+        // console.log(response?.message);
+        toast.error(response?.message);
       }
-
-      toast.error(response.message);
-      console.log(response.message);
     } catch (err) {
-      toast.error(err);
-      console.log(err);
+      console.log({ err });
     }
   };
 

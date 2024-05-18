@@ -61,7 +61,7 @@ const Login = () => {
       navigate("/");
       fetchUserDetails();
     } catch (error) {
-      toast.error(error.message);
+      toast.error("something went wrong!");
       console.log(error.message);
     }
   };
