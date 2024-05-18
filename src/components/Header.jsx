@@ -21,9 +21,7 @@ const Header = () => {
     <header className="h-16 shadow-md bg-white w-full z-40">
       <div className=" h-full container mx-auto flex items-center px-4">
         <div className="justify-start flex-1">
-          <Link to={"/"}>
-            <Logo w={90} h={50} />
-          </Link>
+          <Logo w={90} h={50} />
         </div>
 
         <div className="hidden lg:flex items-center w-full max-w-sm border rounded-full focus-within:shadow pl-2 flex-3 justify-center">

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import RegisterIcons from "../assests/avatar.png";
+import Avatar from "../assests/avatar.png";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [userProfileImg, setuserProfileImg] = useState(null);
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -30,8 +31,8 @@ const Register = () => {
   };
 
   const handleUploadPic = async (e) => {
-    const file = e.target.files[0];
-    console.log(file);
+    setuserProfileImg(e.target.files[0]);
+    console.log(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
@@ -61,8 +62,12 @@ const Register = () => {
             <div className="w-20 h-20 mx-auto relative overflow-hidden rounded-full">
               <div>
                 <img
-                  src={data.profileImage || RegisterIcons}
-                  alt="login icons"
+                  src={
+                    userProfileImg
+                      ? URL.createObjectURL(userProfileImg)
+                      : Avatar
+                  }
+                  alt="User profile image"
                 />
               </div>
               <form>
@@ -177,7 +182,7 @@ const Register = () => {
             </form>
 
             <p className="my-5">
-              Already have account ?{" "}
+              Already have account?{" "}
               <Link
                 to={"/login"}
                 className=" text-blue-600 hover:text-blue-700 hover:underline"

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import loginIcons from "../assests/avatar.png";
+import Avatar from "../assests/avatar.png";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -43,7 +43,7 @@ const Login = () => {
       >
         <div className="bg-white p-5 w-full max-w-sm mx-auto ">
           <div className="w-20 h-20 mx-auto">
-            <img src={loginIcons} alt="login icons" />
+            <img src={Avatar} alt="login icons" />
           </div>
 
           <form className="pt-6 flex flex-col gap-2" onSubmit={handleSubmit}>
@@ -93,7 +93,7 @@ const Login = () => {
           </form>
 
           <p className="my-5">
-            Don't have account ?{" "}
+            Don't have an account?{" "}
             <Link
               to={"/register"}
               className=" text-blue-600 hover:text-blue-700 hover:underline"
