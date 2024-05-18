@@ -62,13 +62,12 @@ const Register = () => {
       !data.password ||
       !data.confirmPassword
     ) {
-      console.log("All feilds are required!");
-      toast("All feilds are required!");
+      toast.error("All feilds are required!");
       return;
     }
 
     if (data.password !== data.confirmPassword) {
-      toast.error("Please check password and confirm password");
+      toast.error("password and confirm password must be same!");
       return;
     }
 
@@ -90,17 +89,16 @@ const Register = () => {
 
       const response = await responseData.json();
 
-      if (!response.status === 201) {
-        toast.error(response.message);
-        console.log(response.message);
-        return;
+      if (response.status === 201) {
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("userId", response.userId);
+        toast.success(response);
+        console.log({ data, response });
+        navigate("/");
       }
 
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("userId", response.userId);
-      toast.success(response);
-      console.log({ data, response });
-      navigate("/");
+      toast.error(response.message);
+      console.log(response.message);
     } catch (err) {
       toast.error(err);
       console.log(err);

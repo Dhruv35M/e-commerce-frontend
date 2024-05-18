@@ -3,6 +3,8 @@ import Avatar from "../assests/avatar.png";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import SummaryApi from "../common";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,11 +30,37 @@ const Login = () => {
     e.preventDefault();
 
     if (!data.email || !data.password) {
-      console.log("All feilds are required!");
+      toast.error("All feilds are required!");
+      return;
     }
 
-    console.log("login successful");
-    navigate("/");
+    try {
+      const responseData = await fetch(SummaryApi.logIn.url, {
+        method: SummaryApi.logIn.method,
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const response = await responseData.json();
+      console.log("this is the preponse", { response });
+
+      if (response.ok) {
+        toast.error("Request failed!");
+        console.log(response.status);
+        return;
+      }
+
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("userId", response.userId);
+      toast.success("login successfully");
+      console.log({ response });
+      navigate("/");
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error.message);
+    }
   };
 
   return (
