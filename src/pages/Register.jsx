@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Avatar from "../assests/avatar.png";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import SummaryApi from "../common";
+import Context from "../context";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -23,6 +24,7 @@ const Register = () => {
   });
 
   const navigate = useNavigate();
+  const { fetchUserDetails } = useContext(Context);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -95,6 +97,7 @@ const Register = () => {
         toast.success(response);
         console.log({ data, response });
         navigate("/");
+        fetchUserDetails();
       }
 
       toast.error(response.message);
