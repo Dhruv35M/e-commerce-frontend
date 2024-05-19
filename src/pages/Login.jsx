@@ -57,8 +57,8 @@ const Login = () => {
       localStorage.setItem("token", response.token);
       localStorage.setItem("userId", response.userId);
       toast.success("login successfully");
-      console.log({ response });
       navigate("/");
+      console.log({ response });
       fetchUserDetails();
     } catch (error) {
       toast.error("something went wrong!");

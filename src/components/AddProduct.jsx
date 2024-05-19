@@ -20,6 +20,7 @@ const AddProduct = ({ onClose, fetchData }) => {
 
   const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
   const [fullScreenImage, setFullScreenImage] = useState("");
+  const [uploading, setUploading] = useState(false);
   const jwtToken = localStorage.getItem("token");
 
   const handleOnChange = (e) => {
@@ -87,23 +88,24 @@ const AddProduct = ({ onClose, fetchData }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setUploading(true);
 
-    const imageUrls = await uploadImages(data.image);
-    console.log({ imageUrls });
-    if (imageUrls) {
-      imageUrls.map((item) => console.log(item));
+    let imageUrls = [];
+    try {
+      imageUrls = await uploadImages(data.image);
+      console.log({ imageUrls });
+      if (imageUrls) {
+        imageUrls.map((item) => console.log(item));
+      }
+    } catch (err) {
+      toast.error("Image upload failed!");
+      console.log(error);
     }
 
-    let product = {
-      productName: data.productName,
-      description: data.description,
-      price: data.price,
-      brandName: data.brandName,
-      imageUrl: imageUrls,
-      discount: data.discount,
-      quantity: 30,
-      categoryId: data.categoryId,
-    };
+    setData((prev) => ({
+      ...prev,
+      ["image"]: imageUrls,
+    }));
 
     console.log({ product });
     try {
@@ -113,25 +115,22 @@ const AddProduct = ({ onClose, fetchData }) => {
           Authorization: `Bearer ${jwtToken}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(product),
+        body: JSON.stringify(data),
       });
 
-      const responseData = await response.json();
-
-      if (responseData) {
-        if (responseData.ok) {
-          toast.success(responseData.message);
-          onClose();
-          fetchData();
-        } else {
-          toast.error(responseData.message);
-        }
+      if (response.ok) {
+        const responseData = await response.json();
+        toast.success(responseData.message);
+        onClose();
+        fetchData();
       } else {
-        toast.error("Failed to upload product");
+        console.log(response);
       }
+      setUploading(false);
     } catch (error) {
       console.error("Error uploading product:", error);
       toast.error("Failed to upload product");
+      setUploading(false);
     }
   };
 
@@ -294,7 +293,7 @@ const AddProduct = ({ onClose, fetchData }) => {
           ></textarea>
 
           <button className="px-3 py-2 bg-blue-600 text-white mb-10 hover:bg-blue-700">
-            Upload Product
+            {uploading ? "Uploading..." : "Upload Product"}
           </button>
         </form>
       </div>

@@ -109,7 +109,7 @@ const AllUsers = () => {
           email={updateUserDetails?.email}
           role={updateUserDetails?.role}
           userId={updateUserDetails?.userId}
-          callFunc={fetchAllUsers}
+          refesh={fetchAllUsers}
         />
       )}
     </div>

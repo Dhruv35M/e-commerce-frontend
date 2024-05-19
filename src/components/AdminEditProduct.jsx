@@ -36,17 +36,6 @@ const AdminEditProduct = ({ onClose, productData, fetchdata }) => {
     });
   }, [productData?.categoryId]);
 
-  // const [data, setData] = useState({
-  //   ...productData,
-  //   productName: productData?.productName,
-  //   brandName: productData?.brandName,
-  //   category: getCategoryValue(productData?.brandName),
-  //   image: productData?.image.split(",") || [],
-  //   description: productData?.description,
-  //   price: productData?.price,
-  //   discount: productData?.discount,
-  // });
-
   const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
   const [fullScreenImage, setFullScreenImage] = useState("");
   const jwtToken = localStorage.getItem("token");
@@ -64,13 +53,15 @@ const AdminEditProduct = ({ onClose, productData, fetchdata }) => {
   };
 
   const handleaddProduct = async (e) => {
+    const formData = new FormData();
     const imgFile = e.target.files[0];
+    formData.append("image", imgFile);
     const imageUrls = await uploadImages(imgFile);
 
     setData((prev) => {
       return {
         ...prev,
-        imageUrl: [...prev.imageUrls, imageUrls],
+        image: [...prev.image, imageUrls],
       };
     });
   };
@@ -124,6 +115,7 @@ const AdminEditProduct = ({ onClose, productData, fetchdata }) => {
     if (response.ok) {
       toast.success(responseData?.message);
       onClose();
+      fetchdata();
       const responseData = await response.json();
       fetchdata();
     }

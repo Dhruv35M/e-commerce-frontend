@@ -28,7 +28,7 @@ const SummaryApi = {
 
   updateProduct: {
     url: `${API}/admin/products`,
-    method: "POST",
+    method: "PUT",
   },
 
   currentUser: {

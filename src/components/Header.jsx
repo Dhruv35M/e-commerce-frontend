@@ -24,7 +24,7 @@ const Header = () => {
   const handleLogout = async () => {
     localStorage.clear();
     dispatch(setUserDetails(null));
-    toast.success("logout successfully!");
+    toast.info("logout successfully!");
     navigate("/login");
   };
 
@@ -52,40 +52,36 @@ const Header = () => {
 
         <div className="flex items-end gap-7 flex-1 justify-end">
           <div className="flex items-center gap-7">
-            <div className="relative flex justify-center">
-              {user?.userId && (
+            {user?.userId && (
+              <div className="relative flex justify-center">
                 <div
                   className="text-3xl cursor-pointer relative flex justify-center"
                   onClick={() => setMenuDisplay((prev) => !prev)}
                 >
-                  {user ? (
-                    <img
-                      src={user?.profilePic || userAvatar}
-                      className="w-10 h-10 rounded-full"
-                      alt={user?.name}
-                    />
-                  ) : (
-                    <FaRegCircleUser />
-                  )}
+                  <img
+                    src={user?.profilePic || userAvatar}
+                    className="w-10 h-10 rounded-full"
+                    alt={user?.name}
+                  />
                 </div>
-              )}
 
-              {menuDisplay && (
-                <div className="absolute bg-white bottom-0 top-11 h-fit p-2 shadow-lg rounded">
-                  <nav>
-                    {user?.roles[0].roleName === ROLE.ADMIN && (
-                      <Link
-                        to={"/admin-panel/all-products"}
-                        className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2"
-                        onClick={() => setMenuDisplay((prev) => !prev)}
-                      >
-                        Admin Panel
-                      </Link>
-                    )}
-                  </nav>
-                </div>
-              )}
-            </div>
+                {menuDisplay && (
+                  <div className="absolute bg-white bottom-0 top-11 h-fit p-2 shadow-lg rounded">
+                    <nav>
+                      {user?.roles[0].roleName === ROLE.ADMIN && (
+                        <Link
+                          to={"/admin-panel/all-products"}
+                          className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2"
+                          onClick={() => setMenuDisplay((prev) => !prev)}
+                        >
+                          Admin Panel
+                        </Link>
+                      )}
+                    </nav>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           <Link to={"/cart"} className="text-2xl relative">
