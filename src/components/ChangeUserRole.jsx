@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import ROLE from "../common/role";
 import { IoMdClose } from "react-icons/io";
-import SummaryApi from "../common";
 import { toast } from "react-toastify";
+import SummaryApi from "../common";
 
 const ChangeUserRole = ({
   firstName,
@@ -14,35 +14,36 @@ const ChangeUserRole = ({
   callFunc,
 }) => {
   const [userRole, setUserRole] = useState(role);
-
+  const jwtToken = localStorage.getItem("token");
   const handleOnChangeSelect = (e) => {
     setUserRole(e.target.value);
-
-    console.log(e.target.value);
   };
 
+  console.log("user role", userRole);
   const updateUserRole = async () => {
-    const fetchResponse = await fetch(SummaryApi.updateUser.url, {
-      // method: SummaryApi.updateUser.method,
-      // credentials: "include",
-      // headers: {
-      //   "content-type": "application/json",
-      // },
-      // body: JSON.stringify({
-      //   userId: userId,
-      //   role: userRole,
-      // }),
-    });
+    try {
+      const updatedRole = role && role === "USER" ? "ADMIN" : "USER";
+      const response = await fetch(
+        `${SummaryApi.changeRole.url}/${userId}/role/${updatedRole}`,
+        {
+          method: SummaryApi.changeRole.method,
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
 
-    const responseData = await fetchResponse.json();
-
-    if (responseData.success) {
-      toast.success(responseData.message);
-      onClose();
-      callFunc();
+      if (response.ok) {
+        toast.success(`role updated to ${role} for user ${email}`);
+        onClose();
+        callFunc();
+      } else {
+        console.log(response);
+        console.log("role updated", response);
+      }
+    } catch (error) {
+      console.log("Error updating role:", error.message || error);
     }
-
-    console.log("role updated", responseData);
   };
 
   return (

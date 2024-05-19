@@ -36,6 +36,11 @@ const SummaryApi = {
     method: "GET",
   },
 
+  changeRole: {
+    url: `${API}/admin/users`,
+    method: "PUT",
+  },
+
   allUser: {
     url: `${API}/admin/users`,
     method: "GET",

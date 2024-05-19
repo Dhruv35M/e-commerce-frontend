@@ -47,10 +47,14 @@ const AllUsers = () => {
   }, []);
 
   return (
-    <div className="bg-white pb-4">
+    <div className="">
+      <div className="bg-white py-2 px-4 flex justify-between items-center">
+        <h2 className="font-bold text-lg">All Users</h2>
+      </div>
+
       <table className="w-full userTable">
         <thead>
-          <tr className="bg-black text-white">
+          <tr className="bg-slate-600 h-10 mb-4 text-white">
             <th>Sr.</th>
             <th>First Name</th>
             <th>Last Name</th>
@@ -76,10 +80,14 @@ const AllUsers = () => {
                   <td>{el?.roles[0]?.roleName}</td>
                   <td>{moment(el?.createdAt).format("LL")}</td>
                   <td>
+                    {console.log("role", el.roles[0]?.roleName)}
                     <button
                       className="bg-green-100 p-2 rounded-full cursor-pointer hover:bg-green-500 hover:text-white"
                       onClick={() => {
-                        setUpdateUserDetails(el);
+                        setUpdateUserDetails({
+                          ...el,
+                          role: el.roles[0]?.roleName || "",
+                        });
                         setOpenUpdateRole(true);
                       }}
                     >
