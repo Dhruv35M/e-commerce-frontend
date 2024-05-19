@@ -29,7 +29,9 @@ const AdminPanel = () => {
               <FaRegCircleUser />
             )}
           </div>
-          <p className="capitalize text-lg font-semibold">{user?.name}</p>
+          <p className="capitalize text-lg font-semibold">
+            {user?.firstName} {user?.lastName}
+          </p>
           <p className="text-sm">{user?.roles[0].roleName}</p>
         </div>
 

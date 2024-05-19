@@ -20,7 +20,10 @@ const getCategoryId = (value) => {
 };
 
 const getCategoryValue = (id) => {
-  const category = productCategory.find((id) => category.id === id);
+  if (id === null || id === undefined) {
+    return null;
+  }
+  const category = productCategory.find((id) => productCategory.id === id);
   return category ? category.value : "Others";
 };
 

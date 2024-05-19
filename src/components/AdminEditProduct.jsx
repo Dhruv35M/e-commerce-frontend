@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CgClose } from "react-icons/cg";
 import { productCategory } from "../helpers/productCategory";
 import { FaCloudUploadAlt } from "react-icons/fa";
@@ -6,19 +6,47 @@ import DisplayImage from "./DisplayImage";
 import { MdDelete } from "react-icons/md";
 import SummaryApi from "../common";
 import { toast } from "react-toastify";
+import { getCategoryValue } from "../helpers/productCategory";
+import uploadImages from "../helpers/imageUpload";
 
 const AdminEditProduct = ({ onClose, productData, fetchdata }) => {
   console.log({ productData });
+  const [category, setCategory] = useState(null);
   const [data, setData] = useState({
-    ...productData,
-    productName: productData?.productName,
-    brandName: productData?.brandName,
-    category: productData?.category,
-    productImage: productData?.productImage || [],
-    description: productData?.description,
-    price: productData?.price,
-    sellingPrice: productData?.sellingPrice,
+    productName: "",
+    brandName: "",
+    image: [],
+    description: "",
+    price: 0.0,
+    discount: 0,
+    categoryId: 13,
   });
+
+  useEffect(() => {
+    // const categoryValue = getCategoryValue(productData?.categoryId);
+    // setCategory(categoryValue);
+    setData({
+      productName: productData.productName,
+      brandName: productData.brandName,
+      category: getCategoryValue(productData.categoryId),
+      image: productData.image ? productData.image.split(",") : [],
+      description: productData.description,
+      price: productData.price,
+      discount: productData.discount,
+    });
+  }, [productData?.categoryId]);
+
+  // const [data, setData] = useState({
+  //   ...productData,
+  //   productName: productData?.productName,
+  //   brandName: productData?.brandName,
+  //   category: getCategoryValue(productData?.brandName),
+  //   image: productData?.image.split(",") || [],
+  //   description: productData?.description,
+  //   price: productData?.price,
+  //   discount: productData?.discount,
+  // });
+
   const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
   const [fullScreenImage, setFullScreenImage] = useState("");
   const jwtToken = localStorage.getItem("token");
@@ -36,36 +64,50 @@ const AdminEditProduct = ({ onClose, productData, fetchdata }) => {
   };
 
   const handleaddProduct = async (e) => {
-    const file = e.target.files[0];
-    const uploadImageCloudinary = await uploadImage(file);
+    const imgFile = e.target.files[0];
+    const imageUrls = await uploadImages(imgFile);
 
     setData((prev) => {
       return {
         ...prev,
-        productImage: [...prev.productImage, uploadImageCloudinary.url],
+        imageUrl: [...prev.imageUrls, imageUrls],
       };
     });
+  };
+
+  const handleUpdateImage = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setData((prev) => ({
+        ...prev,
+        image: [...prev.image, file],
+        category: [category],
+      }));
+    }
   };
 
   const handleDeleteProductImage = async (index) => {
     console.log("image index", index);
 
-    const newProductImage = [...data.productImage];
-    newProductImage.splice(index, 1);
+    const newImage = [...data.image];
+    newImage.splice(index, 1);
 
     setData((prev) => {
       return {
         ...prev,
-        productImage: [...newProductImage],
+        image: [...newImage],
       };
     });
   };
 
-  {
-    /**upload product */
-  }
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const imageUrls = await uploadImages(data.image);
+    console.log({ imageUrls });
+    if (imageUrls) {
+      imageUrls.map((item) => console.log(item));
+    }
 
     const response = await fetch(
       `${SummaryApi.updateProduct.url}/${productData.productId}`,
@@ -79,11 +121,10 @@ const AdminEditProduct = ({ onClose, productData, fetchdata }) => {
       }
     );
 
-    const responseData = await response.json();
-
-    if (responseData.success) {
+    if (response.ok) {
       toast.success(responseData?.message);
       onClose();
+      const responseData = await response.json();
       fetchdata();
     }
 
@@ -140,7 +181,6 @@ const AdminEditProduct = ({ onClose, productData, fetchdata }) => {
           </label>
           <select
             required
-            value={data.category}
             name="category"
             onChange={handleOnChange}
             className="p-2 bg-slate-100 border rounded"
@@ -175,11 +215,11 @@ const AdminEditProduct = ({ onClose, productData, fetchdata }) => {
             </div>
           </label>
           <div>
-            {data?.productImage[0] ? (
+            {data?.image ? (
               <div className="flex items-center gap-2">
-                {data.productImage.map((el, index) => {
+                {data.image.map((el, index) => {
                   return (
-                    <div className="relative group">
+                    <div className="relative group" key={index}>
                       <img
                         src={el}
                         alt={el}
@@ -189,11 +229,12 @@ const AdminEditProduct = ({ onClose, productData, fetchdata }) => {
                         onClick={() => {
                           setOpenFullScreenImage(true);
                           setFullScreenImage(el);
+                          handleUpdateImage;
                         }}
                       />
 
                       <div
-                        className="absolute bottom-0 right-0 p-1 text-white bg-blue-600 rounded-full hidden group-hover:block cursor-pointer"
+                        className="absolute bottom-0 right-0 p-1 text-white bg-red-600 rounded-full hidden group-hover:block cursor-pointer"
                         onClick={() => handleDeleteProductImage(index)}
                       >
                         <MdDelete />
@@ -216,22 +257,22 @@ const AdminEditProduct = ({ onClose, productData, fetchdata }) => {
             type="number"
             id="price"
             placeholder="Enter price"
-            value={data.price}
             name="price"
+            value={data.price}
             onChange={handleOnChange}
             className="p-2 bg-slate-100 border rounded"
             required
           />
 
-          <label htmlFor="sellingPrice" className="mt-3">
-            Selling Price:
+          <label htmlFor="discount" className="mt-3">
+            discount(%):
           </label>
           <input
             type="number"
-            id="sellingPrice"
+            id="discount"
             placeholder="Enter selling price"
-            value={data.sellingPrice}
-            name="sellingPrice"
+            value={data.discount}
+            name="discount"
             onChange={handleOnChange}
             className="p-2 bg-slate-100 border rounded"
             required

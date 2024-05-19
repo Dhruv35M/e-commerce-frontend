@@ -9,10 +9,13 @@ const AdminProductCard = ({ data, fetchdata }) => {
 
   return (
     <div className="bg-white p-4 rounded ">
-      <div className="w-40">
+      <div className="w-40 ">
         <div className="w-32 h-32 flex justify-center items-center">
-          {data.image !== null ? (
-            <img src={data?.image[0]} className="mx-auto object-fill h-full" />
+          {data.image ? (
+            <img
+              src={data.image.split(",")[0]}
+              className="mx-auto object-fill h-full"
+            />
           ) : (
             <img src={imgTemp} className="mx-auto object-fill h-full" />
           )}

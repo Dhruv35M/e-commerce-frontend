@@ -15,7 +15,7 @@ const AddProduct = ({ onClose, fetchData }) => {
     description: "",
     price: 0.0,
     discount: 0,
-    categoryId: 3,
+    categoryId: 13,
   });
 
   const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
@@ -29,7 +29,6 @@ const AddProduct = ({ onClose, fetchData }) => {
 
     setData((prev) => ({
       ...prev,
-      // [name]: name === "category" ? getCategoryId(value) : value,
       [name]: value,
     }));
   };
