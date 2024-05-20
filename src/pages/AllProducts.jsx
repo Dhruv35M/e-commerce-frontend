@@ -26,6 +26,14 @@ const AllProducts = () => {
       if (fetchData.ok) {
         const responseData = await fetchData.json();
         setAllProduct(responseData.content);
+        const imageUrls =
+          responseData?.image.length() > 0 ? responseData.image.split(",") : [];
+
+        setAllProduct((prev) => ({
+          ...prev,
+          image: imageUrls,
+        }));
+
         console.log({ responseData });
       } else {
         console.log("failed", fetchData);

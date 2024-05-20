@@ -105,4 +105,9 @@ const getCategoryValue = (id) => {
   return category ? category.value : "Others";
 };
 
-export { productCategory, getCategoryId, getCategoryValue };
+const getRandomCategory = () => {
+  const randomIndex = Math.floor(Math.random() * productCategory.length);
+  return productCategory[randomIndex].value;
+};
+
+export { productCategory, getRandomCategory, getCategoryId, getCategoryValue };

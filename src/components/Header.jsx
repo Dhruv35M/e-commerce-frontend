@@ -16,6 +16,7 @@ const Header = () => {
   const [menuDisplay, setMenuDisplay] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     setCurrentRoute(location.pathname);
@@ -28,22 +29,35 @@ const Header = () => {
     navigate("/login");
   };
 
+  const handleSearch = (e) => {
+    const { value } = e.target;
+    setSearch(value);
+
+    if (value) {
+      navigate(`/search?q=${value}`);
+    } else {
+      navigate("/search");
+    }
+  };
+
   const authButtonHandler = () => {
     setCurrentRoute((prev) => (prev === "/login" ? "/register" : "/login"));
   };
 
   return (
-    <header className="h-16 shadow-md bg-white w-full z-40">
+    <header className="sticky top-0 h-16 shadow-sm bg-blue-800 w-full z-40 bg-opacity-30 backdrop-filter backdrop-blur-lg">
       <div className=" h-full container mx-auto flex items-center px-4">
         <div className="justify-start flex-1">
           <Logo w={90} h={50} />
         </div>
 
-        <div className="hidden lg:flex items-center w-full max-w-sm border rounded-full focus-within:shadow pl-2 flex-3 justify-center">
+        <div className="hidden lg:flex items-center w-full bg-white max-w-sm border rounded-full focus-within:shadow pl-2 flex-3 justify-center">
           <input
             type="text"
             placeholder="search product here..."
             className="w-full outline-none"
+            onChange={handleSearch}
+            value={search}
           />
           <div className="text-lg min-w-[50px] h-8 bg-blue-600 flex items-center justify-center rounded-r-full text-white hover:cursor-pointer">
             <GrSearch />

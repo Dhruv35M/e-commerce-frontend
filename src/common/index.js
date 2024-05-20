@@ -60,6 +60,21 @@ const SummaryApi = {
     url: `${API}/public/products`,
     method: "GET",
   },
+
+  addToCart: {
+    url: `${API}/public/carts`,
+    method: "POST",
+  },
+
+  searchProduct: {
+    url: `${API}/public/products/keyword`,
+    method: "POST",
+  },
+
+  addToCartProductCount: {
+    url: `${API}/public/carts`,
+    method: "GET",
+  },
 };
 
 export default SummaryApi;

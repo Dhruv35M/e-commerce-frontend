@@ -107,7 +107,6 @@ const AddProduct = ({ onClose, fetchData }) => {
       ["image"]: imageUrls,
     }));
 
-    console.log({ product });
     try {
       const response = await fetch(SummaryApi.addProduct.url, {
         method: SummaryApi.addProduct.method,
@@ -217,33 +216,30 @@ const AddProduct = ({ onClose, fetchData }) => {
             </div>
           </label>
           <div>
-            {data?.image[0] ? (
+            {data?.image && data.image.length > 0 ? (
               <div className="flex items-center gap-2">
-                {data.image.map((el, index) => {
-                  return (
-                    <div className="relative group">
-                      <img
-                        src={URL.createObjectURL(el)}
-                        alt={el}
-                        width={80}
-                        height={80}
-                        name="image"
-                        className="bg-slate-100 border cursor-pointer"
-                        onClick={() => {
-                          setOpenFullScreenImage(true);
-                          setFullScreenImage(URL.createObjectURL(el));
-                        }}
-                      />
+                {data.image.map((el, index) => (
+                  <div className="relative group" key={index}>
+                    <img
+                      src={URL.createObjectURL(el)}
+                      alt={el.name}
+                      width={80}
+                      height={80}
+                      className="bg-slate-100 border cursor-pointer"
+                      onClick={() => {
+                        setOpenFullScreenImage(true);
+                        setFullScreenImage(URL.createObjectURL(el));
+                      }}
+                    />
 
-                      <div
-                        className="absolute bottom-0 right-0 p-1 text-white bg-blue-600 rounded-full hidden group-hover:block cursor-pointer"
-                        onClick={() => handleDeleteimage(index)}
-                      >
-                        <MdDelete />
-                      </div>
+                    <div
+                      className="absolute bottom-0 right-0 p-1 text-white bg-blue-600 rounded-full hidden group-hover:block cursor-pointer"
+                      onClick={() => handleDeleteimage(index)}
+                    >
+                      <MdDelete />
                     </div>
-                  );
-                })}
+                  </div>
+                ))}
               </div>
             ) : (
               <p className="text-blue-600 text-xs">
